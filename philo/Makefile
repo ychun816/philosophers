@@ -6,7 +6,7 @@
 #    By: yilin <yilin@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/16 14:47:59 by yilin             #+#    #+#              #
-#    Updated: 2025/01/15 20:27:18 by yilin            ###   ########.fr        #
+#    Updated: 2025/01/16 16:53:53 by yilin            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,14 +24,14 @@ INCL_DIR = includes
 SRCS_DIR = srcs
 OBJS_DIR = objs
 
-MAIN_FL = main.c
+FL = main.c  #test.c
 
 # **************************************************************************** #
 #                              SRC & OBJ FILES                                 #
 # **************************************************************************** #
 
 # CANNOT ADDPREFIX (MAYBE)
-SRCS = $(addprefix $(SRCS_DIR)/, $(MAIN_FL)) #######$(TESTER_FL)
+SRCS = $(addprefix $(SRCS_DIR)/, $(FL))
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 
 # **************************************************************************** #
@@ -46,8 +46,10 @@ RM = rm -rf
 #                               BUILD COMMANDS                                 #
 # **************************************************************************** #
 
+### Build Targets ###
 all: $(NAME)
 
+### NAME Create the executable ###
 $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 	@echo "$(ROSEB)🚀🦄 $(NAME) SUCCESSFULLY COMPILED! 🦄🚀$(COLOR_RESET)"
@@ -62,13 +64,15 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
 $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 
+### Clean up object files and directories ###
 clean:
 	@$(RM) $(OBJS_DIR)
 	@echo "$(BABEBLUEB)🧹 CLEAN DONE! OBJS FILES REMOVED 🧹$(COLOR_RESET)"
 
+### Remove all built files ###
 fclean: clean
 	@$(RM) $(NAME)
-	@echo "$(BABEBLUEB)🫧 FCLEAN DONE! $(NAME) REMOVED 🫧$(COLOR_RESET)"
+	@echo "$(BABEBLUEB)🫧 FCLEAN DONE! [ $(NAME) ] REMOVED 🫧$(COLOR_RESET)"
 
 ### Rebuild the project ###
 re: fclean all

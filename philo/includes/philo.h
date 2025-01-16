@@ -5,70 +5,79 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/16 14:47:59 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/15 20:27:15 by yilin            ###   ########.fr       */
+/*   Created: 2025/01/16 16:54:01 by yilin             #+#    #+#             */
+/*   Updated: 2025/01/16 16:54:13 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <errno.h>
-# include <limits.h>
-# include <signal.h>
-# include <stdbool.h>
+# include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
+# include <stdbool.h>
+# include <errno.h>
+# include <limits.h>
 
+# include <pthread.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
-# include <pthread.h>
+# include <sys/time.h>
 
+/***** DEFINES *****/
 # define SUCCESS 0
 # define FAILURE 1
-# define FAILURE_VOID 2
-# define BUILD_FAILURE -1
 
-/************ STRUCTURE ************/
 
-typedef struct  s_philo_data
+/***** STRUCTURES *****/
+typedef enum e_state
 {
-    int philo_count;
-    int eat;
-    int die;
-    int sleep;
-    int max_meal;
-    long long start_time;
-    int should_end;
-    int all_satisfied;
-    int end_reason;
-    t_mutex long_mutex;
-    
-    
-       
-}   t_philo_data;
+    DEFAULT,    // Default state, before any action
+    FORK,       // Picking up a fork
+    EAT,        // Eating
+    SLEEP,      // Sleeping
+    THINK,      // Thinking
+    DIED,       // Philosopher has died
+    FULL   // Philosopher has finished all meals
+}   t_state;
 
-
-
-typedef struct  s_philo
+typedef struct s_fork
 {
-    int id;
-    int dead;
-    int meal_remain;
-    long long
-    
-    t_philo_data    *content;
-}   t_philo
+    pthread_mutex_t mutex;          // Mutex for the fork
+}   t_fork;
 
+typedef struct s_philo
+{
+    int             id;             // Philosopher ID
+    int             eat_count;      // Number of meals eaten
+    bool            inited;    // Initialization status
+    t_state        state;          // Current action of the philosopher
+    pthread_t       thread;         // Thread for the philosopher
+    t_state          *data;          // Pointer to shared simulation data
+    t_fork          *left_fork;     // Left fork assigned to this philosopher
+    t_fork          *right_fork;    // Right fork assigned to this philosopher
+    struct s_philo  *left_philo;    // Pointer to the left philosopher
+    struct s_philo  *right_philo;   // Pointer to the right philosopher
+}                   t_philo;
 
+typedef struct s_table
+{
+    unsigned int    to_die;    // Time until a philosopher dies if not eating
+    unsigned int    to_eat;    // Time a philosopher spends eating
+    unsigned int    to_sleep;  // Time a philosopher spends sleeping
+    int             nb_philo;   // Number of philosophers
+    int             nb_must_eat; // Meals required to be satisfied
+    bool            is_dead;        // Flag indicating if a philosopher has died
+    bool            is_started;     // Flag to start the simulation
+    unsigned long   time_started;   // Simulation start time
+    pthread_mutex_t mutex;          // General mutex for shared resources
+    pthread_mutex_t print_mutex;    // Mutex for printing actions
+}   t_table;
 
-/************ FUNCTIONS ************/
-
-
-void *routine();
-void *routine2();
-
+/***** FUNCTIONS *****/
+// void log_action(t_philo *philo);
+// void    *philosopher_routine(void *arg)
 
 
 #endif
