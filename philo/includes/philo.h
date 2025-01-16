@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:54:01 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/16 16:54:13 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/16 20:32:50 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,59 +25,78 @@
 # include <sys/wait.h>
 # include <sys/time.h>
 
-/***** DEFINES *****/
+
 # define SUCCESS 0
 # define FAILURE 1
 
 
 /***** STRUCTURES *****/
+
+//NO NEED DEFAULT(as 0) : Philosophers start in THINKING state immediately when their thread begins
+//NO NEED FULL : Handle meal completion through counting rather than state:
 typedef enum e_state
 {
-    DEFAULT,    // Default state, before any action
-    FORK,       // Picking up a fork
-    EAT,        // Eating
-    SLEEP,      // Sleeping
-    THINK,      // Thinking
-    DIED,       // Philosopher has died
-    FULL   // Philosopher has finished all meals
+    TAKING_FORK,
+    EATING,
+    SLEEPING,
+    THINKING,
+    DIED,
 }   t_state;
 
-typedef struct s_fork
-{
-    pthread_mutex_t mutex;          // Mutex for the fork
-}   t_fork;
+//A fork is simply a mutex
+// it can either be locked (in use by a philosopher) or unlocked (available).
+//There's no additional data or properties we need to track about forks
+// typedef struct s_fork
+// {
+//     pthread_mutex_t mutex;          // Mutex for the fork
+// }   t_fork;
 
-typedef struct s_philo
+typedef struct s_philo 
 {
-    int             id;             // Philosopher ID
-    int             eat_count;      // Number of meals eaten
-    bool            inited;    // Initialization status
-    t_state        state;          // Current action of the philosopher
-    pthread_t       thread;         // Thread for the philosopher
-    t_state          *data;          // Pointer to shared simulation data
-    t_fork          *left_fork;     // Left fork assigned to this philosopher
-    t_fork          *right_fork;    // Right fork assigned to this philosopher
-    struct s_philo  *left_philo;    // Pointer to the left philosopher
-    struct s_philo  *right_philo;   // Pointer to the right philosopher
-}                   t_philo;
+    int             id;
+    int             eat_count;
+    unsigned long   last_meal_time;
+    pthread_t       thread;
+    pthread_mutex_t meal_mutex;
+    struct s_table  *table;
+    pthread_mutex_t *left_fork;
+    pthread_mutex_t *right_fork;
+} t_philo;
 
-typedef struct s_table
+typedef struct s_table 
 {
-    unsigned int    to_die;    // Time until a philosopher dies if not eating
-    unsigned int    to_eat;    // Time a philosopher spends eating
-    unsigned int    to_sleep;  // Time a philosopher spends sleeping
-    int             nb_philo;   // Number of philosophers
-    int             nb_must_eat; // Meals required to be satisfied
-    bool            is_dead;        // Flag indicating if a philosopher has died
-    bool            is_started;     // Flag to start the simulation
-    unsigned long   time_started;   // Simulation start time
-    pthread_mutex_t mutex;          // General mutex for shared resources
-    pthread_mutex_t print_mutex;    // Mutex for printing actions
-}   t_table;
+    int philo_count;
+    unsigned long   time_to_die;
+    unsigned long   time_to_eat;
+    unsigned long   time_to_sleep;
+    int must_eat_count;
+    bool    meal_end;
+    unsigned long   start_time;
+    pthread_mutex_t *forks;
+    pthread_mutex_t print_mutex;
+    pthread_mutex_t death_mutex;
+    t_philo *philo;
+} t_table;
 
+
+/*********************/
 /***** FUNCTIONS *****/
-// void log_action(t_philo *philo);
-// void    *philosopher_routine(void *arg)
+/*********************/
+
+/***** MAIN *****/
+
+
+/***** ROUTINE *****/
+
+
+/***** SUPERVISOR *****/
+
+
+
+/***** MINILIBFT *****/
+int ft_atoi(const char *str);
+void    ft_putstr_fd(char *s, int fd);
+void    *ft_memset(void *block, int value, size_t n);
 
 
 #endif
