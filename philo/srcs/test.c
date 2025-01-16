@@ -1,6 +1,14 @@
 #include "philo.h"
 
-status void log_action(t_philo *philo)
+void long current_time_in_ms(void)
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL); // Get current time
+    long milliseconds = tv.tv_sec * 1000 + tv.tv_usec / 1000; // Convert to milliseconds
+    return milliseconds;
+}
+
+void log_action(t_philo *philo)
 {
     pthread_mutex_lock(&philo->data->print_mutex);
 
@@ -22,7 +30,7 @@ status void log_action(t_philo *philo)
 
     pthread_mutex_unlock(&philo->data->print_mutex);
 }
-
+/*
 void *philosopher_routine(void *arg)
 {
     (void)arg;  // Suppress unused parameter warning
@@ -63,3 +71,4 @@ void *philosopher_routine(void *arg)
 
     return NULL;  // Ensure the function returns a void pointer
 }
+*/

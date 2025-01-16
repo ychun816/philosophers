@@ -23,36 +23,23 @@ NAME = philo
 INCL_DIR = includes
 SRCS_DIR = srcs
 OBJS_DIR = objs
-LIBFT_DIR = libft
 
-DIR = 
-#_DIR = 
-#_DIR = 
-
-
-FL = $(addprefix $(DIR)/, )
+FL = main.c  #test.c
 
 # **************************************************************************** #
 #                              SRC & OBJ FILES                                 #
 # **************************************************************************** #
 
 # CANNOT ADDPREFIX (MAYBE)
-SRCS = $(addprefix $(DIR)/, $(FL) )
+SRCS = $(addprefix $(SRCS_DIR)/, $(FL))
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
-
-# **************************************************************************** #
-#                                 LIBRARY FILES                                #
-# **************************************************************************** #
-
-LIBFT_A = $(LIBFT_DIR)/libft.a
 
 # **************************************************************************** #
 #                            COMPILER & FLAGS                                  #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCL_DIR) -I$(LIBFT_DIR)/includes
-LFLAGS = -L$(LIBFT_DIR) -lft
+CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCL_DIR)
 RM = rm -rf
 
 # **************************************************************************** #
@@ -63,8 +50,8 @@ RM = rm -rf
 all: $(NAME)
 
 ### NAME Create the executable ###
-$(NAME): $(OBJS) $(LIBFT_A)
-	@$(CC) $(CFLAGS) $(OBJS) $(LFLAGS) -o $(NAME)
+$(NAME): $(OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 	@echo "$(ROSEB)🚀🦄 $(NAME) SUCCESSFULLY COMPILED! 🦄🚀$(COLOR_RESET)"
 
 ### Compile object files ###
@@ -77,28 +64,15 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJS_DIR)
 $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 
-### Build the libft library ###
-$(LIBFT_A):
-	@make -C $(LIBFT_DIR)
-	@echo "$(ORANGE_BBG) $(LIBFT_DIR) CREATED$(COLOR_RESET)"
-
-### Archive Libraries ###
-archives: libft
-	@mkdir -p archives
-	@if [ -f $(LIBFT_A) ]; then cp $(LIBFT_A) archives/; fi
-#--silent: add at the back if don't want it displayed!
-
 ### Clean up object files and directories ###
 clean:
 	@$(RM) $(OBJS_DIR)
-	@make clean -C $(LIBFT_DIR)
-	@echo "$(BABEBLUEB)🧹 CLEAN DONE! OBJS of [$(NAME)] REMOVED 🧹$(COLOR_RESET)"
+	@echo "$(BABEBLUEB)🧹 CLEAN DONE! OBJS FILES REMOVED 🧹$(COLOR_RESET)"
 
 ### Remove all built files ###
 fclean: clean
 	@$(RM) $(NAME)
-	@make fclean -C $(LIBFT_DIR)
-	@echo "$(BABEBLUEB)🫧 FCLEAN DONE! [$(LIBFT_A)] REMOVED 🫧$(COLOR_RESET)"
+	@echo "$(BABEBLUEB)🫧 FCLEAN DONE! [ $(NAME) ] REMOVED 🫧$(COLOR_RESET)"
 
 ### Rebuild the project ###
 re: fclean all
@@ -108,7 +82,7 @@ re: fclean all
 #                              PHONY TARGETS                                   #
 # **************************************************************************** #
 
-.PHONY: all clean fclean re libft archives
+.PHONY: all clean fclean re
 
 # **************************************************************************** #
 #                              COLOR SETTING                                   #

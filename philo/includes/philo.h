@@ -64,7 +64,8 @@ typedef struct s_table
 }   t_table;
 
 /***** FUNCTIONS *****/
-void    *philosopher_routine(void *arg)
+// void log_action(t_philo *philo);
+// void    *philosopher_routine(void *arg)
 
 
 #endif
