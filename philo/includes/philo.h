@@ -62,7 +62,7 @@ typedef struct s_philo
     int             eat_count;
     unsigned long   last_meal_time;
     t_table  *ph_table;
-    // pthread_t       thread;
+    pthread_t       thread;
     pthread_mutex_t *left_fork;
     pthread_mutex_t *right_fork;
     pthread_mutex_t meal_mutex;
@@ -81,6 +81,7 @@ typedef struct s_table
     pthread_mutex_t *forks;
     pthread_mutex_t print_mutex;
     pthread_mutex_t death_mutex;
+    pthread_t monitor;  // CHECK LATER: Add monitor thread here
 } t_table;
 
 /* OG thoughts on s_forks stuct? 
