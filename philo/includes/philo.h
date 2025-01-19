@@ -115,7 +115,10 @@ The same goal (managing mutexes for forks) is already achieved with table->forks
 /***** FUNCTIONS *****/
 /*********************/
 
-/***** MAIN *****/
+/***** MAIN/INIT *****/
+int init_table(int ac, char *av[], t_table *table);
+int init_mutex(t_table *table);
+int init_philo(t_table *table);
 
 
 /***** ROUTINE *****/
@@ -129,6 +132,9 @@ The same goal (managing mutexes for forks) is already achieved with table->forks
 int ft_atoi(const char *str);
 void    ft_putstr_fd(char *s, int fd);
 void    *ft_memset(void *block, int value, size_t n);
+
+/***** CLEANUP *****/
+void    cleanup_all(t_table *table);
 
 
 #endif

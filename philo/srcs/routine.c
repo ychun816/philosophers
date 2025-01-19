@@ -11,3 +11,23 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/** print_state */
+void    print_state(t_philo *philo, t_state state)
+{
+    if ()
+        printf();
+}
+
+
+/** philos_routine */
+int philos_routine()
+{
+
+}
+
+/** eat */
+
+/** sleep */
+
+/** think */
