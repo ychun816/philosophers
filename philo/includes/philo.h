@@ -55,6 +55,12 @@ typedef enum e_state
 
 typedef struct s_philo  t_philo;
 typedef struct s_table  t_table;
+typedef struct timeval  t_timeval;
+// struct timeval
+// {
+//   __time_t tv_sec;		/* Seconds.  */
+//   __suseconds_t tv_usec;	/* Microseconds.  */
+// };
 
 typedef struct s_philo 
 {
@@ -75,12 +81,12 @@ typedef struct s_table
     unsigned long   time_to_eat;
     unsigned long   time_to_sleep;
     int nb_must_eat;
-    bool    feast_should_stop;//used as flag: true-> stimulation should stop
+    bool    feast_stop; //used as flag: true-> stimulation should stop
     unsigned long   start_time;
     t_philo *philos;
     pthread_mutex_t *forks;
     pthread_mutex_t print_mutex;
-    pthread_mutex_t death_mutex;
+    pthread_mutex_t stop_mutex;
     pthread_t monitor;  // CHECK LATER: Add monitor thread here
 } t_table;
 
@@ -88,14 +94,14 @@ typedef struct s_table
 struct s_forks
 {
     pthread_mutex_t *forks;
-    pthread_mutex_t print_mutex;
+    pthread_mutex_t print_status_mutex;
     pthread_mutex_t death_mutex;
 };
 If you use this structure, 
 each philosopher would need access to the s_forks instance to get their respective fork mutexes. Here’s why this can be more complex:
 
 a. Increased indirection
-You would need to pass the s_forks structure to every function or thread that requires access to the forks, print_mutex, or death_mutex.
+You would need to pass the s_forks structure to every function or thread that requires access to the forks, print_status_mutex, or death_mutex.
 This adds unnecessary complexity, as the table structure (t_table) already centralizes this information.
 b. Redundant encapsulation
 Mutexes for forks are naturally grouped in t_table. Adding another structure (s_forks) to encapsulate the same data results in redundant abstraction.
@@ -125,7 +131,6 @@ int init_philo(t_table *table);
 
 
 /***** SUPERVISOR *****/
-
 
 
 /***** MINILIBFT *****/

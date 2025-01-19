@@ -17,7 +17,7 @@
  * @note 
  * table->must_eat_count = -1;
  * -> "-1" means there is no "must eat" condition (unlimited eating until the simulation ends due to other factors, such as a philosopher's death).
- * table->feast_should_stop = false;
+ * table->feast_stop = false;
  * -> It acts as a flag to indicate whether the simulation has concluded. 
  * -> The value starts as false because the simulation hasn't started yet and will remain false while philosophers are eating, thinking, and living.
  * -> It signals that the simulation should stop, likely because one of the philosophers has died (or another termination condition has been met).
@@ -39,7 +39,7 @@ int init_table(int ac, char *av[], t_table *table)
     if (table->nb_philo <= 1 || table->time_to_die < 0 ||
         table->time_to_eat < 0 || table->time_to_sleep < 0)
         return (FAILURE);
-    table->feast_should_stop = false;
+    table->feast_stop = false;
     // table->monitor = NULL;//will init in start_feast
     if (init_mutex(table))
         return (FAILURE);
@@ -63,7 +63,7 @@ int init_table(int ac, char *av[], t_table *table)
  * 
  * - Fork mutexes (table->forks): 
  * Each fork is represented by a mutex to ensure that only one philosopher can "pick up" a fork at a time. Without these mutexes, multiple threads could access the same resource simultaneously, leading to undefined behavior.
- * - Print mutex (table->print_mutex): 
+ * - Print mutex (table->print_status_mutex): 
  * Ensures that log messages (e.g., a philosopher eating or dying) are printed sequentially without overlapping from multiple threads.
  * - Death mutex (table->death_mutex): 
  * Protects access to shared data related to the simulation's termination conditions, like detecting a philosopher's death.
@@ -99,7 +99,7 @@ int init_mutex(t_table *table)
     while (++i < table->nb_philo)
         pthread_mutex_init(&table->forks[i], NULL);
     //init print mutex
-    if (pthread_mutex_init(&table->print_mutex, NULL))
+    if (pthread_mutex_init(&table->print_status_mutex, NULL))
         return (FAILURE);
     if (pthread_mutex_init(&table->death_mutex, NULL))
         return (FAILURE);

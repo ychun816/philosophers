@@ -48,7 +48,7 @@ void    cleanup_all(t_table *table)
         pthread_mutex_destroy(&table->forks[i]);// destroy the mutexes stored in table->forks 
     }
     //clean mutex in table struct
-    pthread_mutex_destroy(&table->print_mutex);
+    pthread_mutex_destroy(&table->print_status_mutex);
     pthread_mutex_destroy(&table->death_mutex);
     free(table->forks);//malloced when init
     free(table->philos);//malloced when init
