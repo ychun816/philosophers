@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:57:49 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/16 20:32:58 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/20 19:58:52 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	ft_atoi(const char *str)
 	return (nb * sign);
 }
 
-
 /** ft_putstr_fd */
 void	ft_putstr_fd(char *s, int fd)
 {
@@ -55,7 +54,7 @@ void	ft_putstr_fd(char *s, int fd)
 /** memset */
 void	*ft_memset(void *block, int value, size_t n)
 {
-	char	*ptr;
+	char *ptr;
 
 	ptr = (char *)block;
 	while (n > 0)
