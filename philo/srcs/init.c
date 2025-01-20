@@ -21,8 +21,6 @@
  * -> It acts as a flag to indicate whether the simulation has concluded. 
  * -> The value starts as false because the simulation hasn't started yet and will remain false while philosophers are eating, thinking, and living.
  * -> It signals that the simulation should stop, likely because one of the philosophers has died (or another termination condition has been met).
- * 
- * 
 */
 int init_table(int ac, char *av[], t_table *table)
 {
@@ -59,7 +57,6 @@ int init_table(int ac, char *av[], t_table *table)
  * The table->forks array holds the mutexes for all the forks.
  * Since the number of forks depends on the number of philosophers (philo_count), 
  * its size can only be determined at runtime.
- * 
  * 
  * - Fork mutexes (table->forks): 
  * Each fork is represented by a mutex to ensure that only one philosopher can "pick up" a fork at a time. Without these mutexes, multiple threads could access the same resource simultaneously, leading to undefined behavior.

@@ -22,13 +22,7 @@ Replace timestamp_in_ms with the current timestamp in milliseconds
 and X with the philosopher number.
  */
 
-/** GET TIME
-struct timeval
-{
-  __time_t tv_sec; //SECONDS
-  __suseconds_t tv_usec; //MICROseconds
-}
-*/
+/** GET TIME*/
 unsigned long   get_current_time(void)
 {
     t_timeval   tv;

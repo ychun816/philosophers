@@ -34,16 +34,11 @@
 
 /***** STRUCTURES *****/
 
-//NO NEED DEFAULT(as 0) : Philosophers start in THINKING state immediately when their thread begins
-//NO NEED FULL : Handle meal completion through counting rather than state:
-typedef enum e_state
-{
-    TAKING_FORK,
-    EATING,
-    SLEEPING,
-    THINKING,
-    DIED,
-}   t_state;
+// struct timeval
+// {
+//   __time_t tv_sec;		/* Seconds.  */
+//   __suseconds_t tv_usec;	/* Microseconds.  */
+// };
 
 //A fork is simply a mutex
 // it can either be locked (in use by a philosopher) or unlocked (available).
@@ -56,11 +51,17 @@ typedef enum e_state
 typedef struct s_philo  t_philo;
 typedef struct s_table  t_table;
 typedef struct timeval  t_timeval;
-// struct timeval
-// {
-//   __time_t tv_sec;		/* Seconds.  */
-//   __suseconds_t tv_usec;	/* Microseconds.  */
-// };
+
+//NO NEED DEFAULT(as 0) : Philosophers start in THINKING state immediately when their thread begins
+//NO NEED FULL : Handle meal completion through counting rather than state:
+typedef enum e_state
+{
+    TAKING_FORK,
+    EATING,
+    SLEEPING,
+    THINKING,
+    DIED,
+}   t_state;
 
 typedef struct s_philo 
 {

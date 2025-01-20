@@ -23,8 +23,6 @@
 int main(int ac, char *av[])
 {
     t_table table;
-    // t_table *table;
-    // pthread_t monitor;
 
     //parse/check
     if (ac < 5 || ac > 6)
@@ -64,7 +62,6 @@ int main(int ac, char *av[])
 int start_party(t_table *table)
 {
     int i;
-    // pthread_t   monitor;// Declare a thread variable for the monitor thread
 
     i = -1;
 
@@ -108,9 +105,3 @@ int join_all_threads(t_table *table)
         return (FAILURE);
     return (SUCCESS);
 }
-
-// /** supervisor */
-// supervisor()
-// {
-
-// }

@@ -28,17 +28,6 @@ bool    check_feast_stop(t_table *table)
     pthread_mutex_unlock(&table->stop_mutex);
     return (is_stop);
 }
-/* int ver: 
-int check_feast_stop(t_table *table)
-{
-    int is_stop;
-
-    pthread_mutex_lock(&table->stop_mutex);
-    is_stop = table->feast_stop;
-    pthread_mutex_unlock(&table->stop_mutex);
-    return (is_stop);  // Return value: 1 (true) if the feast should stop, 0 (false) if it should continue
-}
-*/
 
 /** check has dead 
  * This function checks if a philosopher has died.
