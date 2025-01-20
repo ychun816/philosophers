@@ -43,13 +43,13 @@ void    cleanup_all(t_table *table)
     while (++i < table->nb_philo)
     {
         //mutex in philo struct
-        pthread_mutex_destroy(&table->philos[i].meal_mutex);//table->forks[i], is a pthread_mutex_t, not a pointer to pthread_mutex_t -> need & dereference
+        pthread_mutex_destroy(&table->philos[i].eating_mutex);//table->forks[i], is a pthread_mutex_t, not a pointer to pthread_mutex_t -> need & dereference
         //mutex in table struct
         pthread_mutex_destroy(&table->forks[i]);// destroy the mutexes stored in table->forks 
     }
     //clean mutex in table struct
-    pthread_mutex_destroy(&table->print_status_mutex);
-    pthread_mutex_destroy(&table->death_mutex);
+    pthread_mutex_destroy(&table->print_mutex);
+    pthread_mutex_destroy(&table->stop_mutex);
     free(table->forks);//malloced when init
     free(table->philos);//malloced when init
 }

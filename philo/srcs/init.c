@@ -36,11 +36,11 @@ int init_table(int ac, char *av[], t_table *table)
         table->nb_must_eat = ft_atoi(av[5]);
     else
         table->nb_must_eat = -1;
-    if (table->nb_philo <= 1 || table->time_to_die < 0 ||
-        table->time_to_eat < 0 || table->time_to_sleep < 0)
+    if (table->nb_philo <= 1 || table->time_to_die != 0 ||
+        table->time_to_eat != 0 || table->time_to_sleep != 0)
         return (FAILURE);
     table->feast_stop = false;
-    // table->monitor = NULL;//will init in start_feast
+    // table->monitor = NULL;//will init in start_party
     if (init_mutex(table))
         return (FAILURE);
     if (init_philo(table))
@@ -99,9 +99,9 @@ int init_mutex(t_table *table)
     while (++i < table->nb_philo)
         pthread_mutex_init(&table->forks[i], NULL);
     //init print mutex
-    if (pthread_mutex_init(&table->print_status_mutex, NULL))
+    if (pthread_mutex_init(&table->print_mutex, NULL))
         return (FAILURE);
-    if (pthread_mutex_init(&table->death_mutex, NULL))
+    if (pthread_mutex_init(&table->stop_mutex, NULL))
         return (FAILURE);
     return (SUCCESS);
 }
@@ -126,12 +126,12 @@ int init_philo(t_table *table)
     {
         table->philos[i].id = i + 1; //1 philo, 2 philo
         table->philos[i].eat_count = 0; 
-        table->philos[i].last_meal_time = get_time(); 
+        table->philos[i].last_eat_time = get_current_time(); 
         table->philos[i].ph_table = table;
         table->philos[i].left_fork = &table->forks[i]; //1 fork frm left
         table->philos[i].right_fork = &table->forks[(i + 1) % (table->nb_philo)];
     }
-    if (pthread_mutex_init(&table->philos[i].meal_mutex, NULL))
+    if (pthread_mutex_init(&table->philos[i].eating_mutex, NULL))
         return (FAILURE);
     return (SUCCESS);
 }

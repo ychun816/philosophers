@@ -24,7 +24,7 @@ INCL_DIR = includes
 SRCS_DIR = srcs
 OBJS_DIR = objs
 
-FL = main.c  #test.c
+FL = cleanup.c  init.c  main.c  minilibft.c  routine.c  supervisor.c  #test.c
 
 # **************************************************************************** #
 #                              SRC & OBJ FILES                                 #
@@ -39,7 +39,9 @@ OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCL_DIR)
+#CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCL_DIR)
+CFLAGS = -Wall -Werror -g3 -I$(INCL_DIR) -pthread  # Add for linking <pthread.h>
+
 RM = rm -rf
 
 # **************************************************************************** #

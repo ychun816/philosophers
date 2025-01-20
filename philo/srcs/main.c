@@ -23,10 +23,7 @@
 int main(int ac, char *av[])
 {
     t_table *table;
-    pthread_t monitor;
-    int i;
-
-    i = 0;
+    // pthread_t monitor;
 
     //parse/check
     if (ac < 5 || ac > 6)
@@ -34,22 +31,22 @@ int main(int ac, char *av[])
     // if (parse_n_check_args(ac, av, table))
     //     ft_putstr_fd("Invalid Arguments\n");
 
-    // ft_memset(&table, 0, sizeof(t_table));
-    if (init_table(ac, av, &table))
+    ft_memset(&table, 0, sizeof(t_table));
+    if (init_table(ac, av, table))
         return (ft_putstr_fd("Initialization Failed\n", STDERR), FAILURE);
-    if (start_feast(&table))
+    if (start_party(table))
     {
         ft_putstr_fd("Similation Failed! Can't Eat :(\n", STDERR);
-        cleanup_all(&table);
-        return (FAILURE);   
-    }
-    if (join_all_threads(&table))
-    {
-        ft_putstr_fd("Thread Joining Failed\n", STDERR);
-        cleanup_all(&table);
+        cleanup_all(table);
         return (FAILURE);
     }
-    cleanup_all(&table);
+    if (join_all_threads(table))
+    {
+        ft_putstr_fd("Thread Joining Failed\n", STDERR);
+        cleanup_all(table);
+        return (FAILURE);
+    }
+    cleanup_all(table);
     return (SUCCESS);
 }
 
@@ -60,11 +57,11 @@ int main(int ac, char *av[])
 // {
 // }
 
-/** START_FEAST 
+/** start_party 
  * pthread_create() -> 2 philo 2 threads, etc
  * 
 */
-int start_feast(t_table *table)
+int start_party(t_table *table)
 {
     int i;
     // pthread_t   monitor;// Declare a thread variable for the monitor thread
@@ -73,7 +70,7 @@ int start_feast(t_table *table)
 
     // Initialize the start time of the simulation by calling get_time()
     // It will store the current time in table->start_time
-    table->start_time = get_time();
+    table->start_time = get_current_time();
 
     //each philo has each thread -> loop to create
     while (++i < table->nb_philo)
@@ -83,7 +80,7 @@ int start_feast(t_table *table)
         // NULL: Default thread attributes
         // philo_routine: The function that will be executed by the philosopher thread ***
         // &table->philosophers[i]: Pass the address of the philosopher structure as an argument
-        if (pthread_create(&table->philos[i].thread, NULL, philos_routine, &table->philos[i]))
+        if (pthread_create(&table->philos[i].thread, NULL, philo_routine, &table->philos[i]))
             return (FAILURE);
     }
     // Create the monitor thread to monitor the overall simulation
@@ -91,8 +88,8 @@ int start_feast(t_table *table)
     // NULL: Default thread attributes
     // monitor_routine: The function executed by the monitor thread
     // table: Pass the address of the table structure as an argument to monitor
-    if (pthread_create(&table->monitor, NULL, supervisor, table))
-        return (FAILURE);
+//ADD BACK!!!// if (pthread_create(&table->monitor, NULL, supervisor, table))
+    // return (FAILURE);
     return (SUCCESS);
 }
 
@@ -112,8 +109,8 @@ int join_all_threads(t_table *table)
     return (SUCCESS);
 }
 
-/** supervisor */
-supervisor()
-{
+// /** supervisor */
+// supervisor()
+// {
 
-}
+// }

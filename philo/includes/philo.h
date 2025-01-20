@@ -66,12 +66,12 @@ typedef struct s_philo
 {
     int             id;
     int             eat_count;
-    unsigned long   last_meal_time;
+    unsigned long   last_eat_time;
     t_table  *ph_table;
     pthread_t       thread;
     pthread_mutex_t *left_fork;
     pthread_mutex_t *right_fork;
-    pthread_mutex_t meal_mutex;
+    pthread_mutex_t eating_mutex;
 } t_philo;
 
 typedef struct s_table 
@@ -115,20 +115,26 @@ The same goal (managing mutexes for forks) is already achieved with table->forks
 
 */
 
-
-
 /*********************/
 /***** FUNCTIONS *****/
 /*********************/
 
-/***** MAIN/INIT *****/
+/***** MAIN *****/
+int start_party(t_table *table);
+int join_all_threads(t_table *table);
+
+/***** INIT *****/
 int init_table(int ac, char *av[], t_table *table);
 int init_mutex(t_table *table);
 int init_philo(t_table *table);
 
-
 /***** ROUTINE *****/
-
+void    print_state(t_philo *philo, t_state state);
+bool    check_feast_stop(t_table *table);
+void    *philo_routine(void *arg);
+void    take_forks(t_philo *philo);
+void    eating(t_philo *philo);
+void    give_me_a_break(unsigned long duration, t_table *table);
 
 /***** SUPERVISOR *****/
 
@@ -137,6 +143,7 @@ int init_philo(t_table *table);
 int ft_atoi(const char *str);
 void    ft_putstr_fd(char *s, int fd);
 void    *ft_memset(void *block, int value, size_t n);
+unsigned long   get_current_time(void);
 
 /***** CLEANUP *****/
 void    cleanup_all(t_table *table);
