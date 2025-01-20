@@ -22,7 +22,8 @@
  */
 int main(int ac, char *av[])
 {
-    t_table *table;
+    t_table table;
+    // t_table *table;
     // pthread_t monitor;
 
     //parse/check
@@ -30,23 +31,22 @@ int main(int ac, char *av[])
         return (ft_putstr_fd("Invalid Arguments\n", STDERR), FAILURE);
     // if (parse_n_check_args(ac, av, table))
     //     ft_putstr_fd("Invalid Arguments\n");
-
-    ft_memset(&table, 0, sizeof(t_table));
-    if (init_table(ac, av, table))
+    ft_memset(&table, 0, sizeof(t_table));//has to be outof init_table func
+    if (init_table(ac, av, &table))
         return (ft_putstr_fd("Initialization Failed\n", STDERR), FAILURE);
-    if (start_party(table))
+    if (start_party(&table))
     {
         ft_putstr_fd("Similation Failed! Can't Eat :(\n", STDERR);
-        cleanup_all(table);
+        cleanup_all(&table);
         return (FAILURE);
     }
-    if (join_all_threads(table))
+    if (join_all_threads(&table))
     {
         ft_putstr_fd("Thread Joining Failed\n", STDERR);
-        cleanup_all(table);
+        cleanup_all(&table);
         return (FAILURE);
     }
-    cleanup_all(table);
+    cleanup_all(&table);
     return (SUCCESS);
 }
 

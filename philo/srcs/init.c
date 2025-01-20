@@ -26,7 +26,7 @@
 */
 int init_table(int ac, char *av[], t_table *table)
 {
-    ft_memset(&table, 0, sizeof(t_table)); // Zero-initialize the structure
+    // ft_memset(&table, 0, sizeof(t_table)); // Zero-initialize the structure
 
     table->nb_philo = ft_atoi(av[1]);
     table->time_to_die = ft_atoi(av[2]);
@@ -36,8 +36,8 @@ int init_table(int ac, char *av[], t_table *table)
         table->nb_must_eat = ft_atoi(av[5]);
     else
         table->nb_must_eat = -1;//FAILURE-> no need to run check
-    if (table->nb_philo <= 1 || table->time_to_die != 0 ||
-        table->time_to_eat != 0 || table->time_to_sleep != 0)
+    if (table->nb_philo <= 1 || table->time_to_die <= 0 ||
+        table->time_to_eat <= 0 || table->time_to_sleep <= 0)
         return (FAILURE);
     table->feast_stop = false;
     // table->monitor = NULL;//will init in start_party
