@@ -87,7 +87,7 @@ typedef struct s_table
     pthread_mutex_t *forks;
     pthread_mutex_t print_mutex;
     pthread_mutex_t stop_mutex;
-    pthread_t monitor;  // CHECK LATER: Add monitor thread here
+    pthread_t supervise;  // CHECK LATER: Add monitor thread here
 } t_table;
 
 /* OG thoughts on s_forks stuct? 
@@ -130,13 +130,13 @@ int init_philo(t_table *table);
 
 /***** ROUTINE *****/
 void    print_state(t_philo *philo, t_state state);
-bool    check_feast_stop(t_table *table);
 void    *philo_routine(void *arg);
 void    take_forks(t_philo *philo);
 void    eating(t_philo *philo);
 void    give_me_a_break(unsigned long duration, t_table *table);
 
 /***** SUPERVISOR *****/
+bool    check_feast_stop(t_table *table);
 
 
 /***** MINILIBFT *****/

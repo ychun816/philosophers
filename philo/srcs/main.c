@@ -88,8 +88,8 @@ int start_party(t_table *table)
     // NULL: Default thread attributes
     // monitor_routine: The function executed by the monitor thread
     // table: Pass the address of the table structure as an argument to monitor
-//ADD BACK!!!// if (pthread_create(&table->monitor, NULL, supervisor, table))
-    // return (FAILURE);
+    if (pthread_create(&table->supervise, NULL, supervisor, table))
+        return (FAILURE);
     return (SUCCESS);
 }
 
@@ -104,7 +104,7 @@ int join_all_threads(t_table *table)
         if (pthread_join(table->philos[i].thread, NULL))
             return (FAILURE);
     }
-    if (pthread_join(table->monitor, NULL))
+    if (pthread_join(table->supervise, NULL))
         return (FAILURE);
     return (SUCCESS);
 }

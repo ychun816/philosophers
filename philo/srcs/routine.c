@@ -12,21 +12,6 @@
 
 #include "philo.h"
 
-/** check if stop 
- * Lock the death_mutex to safely access feast_stop 
- * Get the current state of the simulation(feast)
- * 
-*/
-bool    check_feast_stop(t_table *table)
-{
-    bool is_stop;
-
-    pthread_mutex_lock(&table->stop_mutex);
-    is_stop = table->feast_stop;
-    pthread_mutex_unlock(&table->stop_mutex);
-    return (is_stop);
-}
-
 /**
 ◦ timestamp_in_ms X has taken a fork
 ◦ timestamp_in_ms X is eating
@@ -51,7 +36,6 @@ unsigned long   get_current_time(void)
     gettimeofday(&tv, NULL);
     return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
-
 
 /** print_state 
  * @param long time; // Variable to store the current timestamp in milliseconds.
