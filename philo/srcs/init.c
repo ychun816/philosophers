@@ -35,7 +35,7 @@ int init_table(int ac, char *av[], t_table *table)
     if (ac == 6)
         table->nb_must_eat = ft_atoi(av[5]);
     else
-        table->nb_must_eat = -1;
+        table->nb_must_eat = -1;//FAILURE-> no need to run check
     if (table->nb_philo <= 1 || table->time_to_die != 0 ||
         table->time_to_eat != 0 || table->time_to_sleep != 0)
         return (FAILURE);
