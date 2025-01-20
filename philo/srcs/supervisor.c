@@ -70,8 +70,8 @@ bool    check_has_dead(t_philo *philo)
 
     //check dead
     pthread_mutex_lock(&philo->ph_table->stop_mutex);
-    is_dead = philo->ph_table->feast_stop
-    if (!is_dead && (current_time - last_eat) > philo->ph_table->time_to_die)//no dead yet
+    is_dead = philo->ph_table->feast_stop;
+    if (!is_dead && (current - last_eat) > philo->ph_table->time_to_die)//no dead yet
     {
         philo->ph_table->feast_stop = true;
         pthread_mutex_unlock(&philo->ph_table->stop_mutex);//unlock right after!
@@ -84,7 +84,6 @@ bool    check_has_dead(t_philo *philo)
 
 /** check  meals
  *  Check if ALL philosophers(t_table *table) have eaten the required number of times (if must_eat_count is set)
- * 
  * 
 */
 bool    check_finish_musteat(t_table *table)
@@ -123,7 +122,7 @@ void    *supervisor(void *arg)
 {
     t_table *table;
     int i;
-    bool is_the_end;
+    // bool is_the_end;
 
     table = (t_table *)arg;
     while (1)
@@ -133,13 +132,17 @@ void    *supervisor(void *arg)
         {
             if (check_has_dead(&table->philos[i]))//philos[i] is value, not pointer!
                 return (NULL);
-            if (check_finish_musteat(&table->philos[i])
+            if (check_finish_musteat(table))
             {
-                if (check_feast_stop(table))
-                {
-                    is_the_end = true;
-                    return (NULL);
-                }
+                pthread_mutex_lock(&table->stop_mutex);
+                table->feast_stop = true;
+                pthread_mutex_unlock(&table->stop_mutex);
+                return (NULL);
+                // if (check_feast_stop(table))
+                // {
+                //     is_the_end = true;
+                //     return (NULL);
+                // }
             }
         }
         usleep(1000);//notneccsary , but suggested!

@@ -1,0 +1,56 @@
+For testing the philosophers program, you would provide input values via command-line arguments. The program expects the following arguments:
+
+1. **Number of philosophers** (`nb_philo`)
+2. **Time to die** (`time_to_die`) – the time (in milliseconds) after which a philosopher dies if they haven't eaten.
+3. **Time to eat** (`time_to_eat`) – the time (in milliseconds) a philosopher takes to eat a meal.
+4. **Time to sleep** (`time_to_sleep`) – the time (in milliseconds) a philosopher sleeps between meals.
+5. **Number of meals to eat (optional)** (`nb_must_eat`) – the number of meals each philosopher should eat before the simulation ends. If not provided, set this value to -1.
+
+### Sample Test Inputs
+
+1. **5 philosophers, basic timing with no must-eat condition:**
+   ```bash
+   ./philosophers 5 800 200 200
+   ```
+   - 5 philosophers
+   - Time to die = 800 ms
+   - Time to eat = 200 ms
+   - Time to sleep = 200 ms
+
+2. **3 philosophers, with must-eat condition:**
+   ```bash
+   ./philosophers 3 600 150 150 3
+   ```
+   - 3 philosophers
+   - Time to die = 600 ms
+   - Time to eat = 150 ms
+   - Time to sleep = 150 ms
+   - Each philosopher must eat 3 times before the simulation ends.
+
+3. **4 philosophers, longer eating/sleeping time, with no must-eat condition:**
+   ```bash
+   ./philosophers 4 1000 300 300
+   ```
+   - 4 philosophers
+   - Time to die = 1000 ms
+   - Time to eat = 300 ms
+   - Time to sleep = 300 ms
+
+4. **2 philosophers with high time-to-die value and must-eat condition:**
+   ```bash
+   ./philosophers 2 5000 500 500 2
+   ```
+   - 2 philosophers
+   - Time to die = 5000 ms
+   - Time to eat = 500 ms
+   - Time to sleep = 500 ms
+   - Each philosopher must eat 2 times before the simulation ends.
+
+5. **Edge case: 1 philosopher, no must-eat condition (they will not die):**
+   ```bash
+   ./philosophers 1 1000 200 200
+   ```
+   - 1 philosopher
+   - Time to die = 1000 ms
+   - Time to eat = 200 ms
+   - Time to sleep = 200 ms

@@ -114,7 +114,6 @@ This extra layer adds verbosity and reduces clarity.
 d. No clear benefit
 The s_forks structure doesn’t add any functional advantage. 
 The same goal (managing mutexes for forks) is already achieved with table->forks.
-
 */
 
 /*********************/
@@ -139,7 +138,9 @@ void    give_me_a_break(unsigned long duration, t_table *table);
 
 /***** SUPERVISOR *****/
 bool    check_feast_stop(t_table *table);
-
+bool    check_has_dead(t_philo *philo);
+bool    check_finish_musteat(t_table *table);
+void    *supervisor(void *arg);
 
 /***** MINILIBFT *****/
 int ft_atoi(const char *str);
