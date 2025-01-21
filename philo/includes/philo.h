@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:54:01 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/20 20:21:44 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/21 13:06:53 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,20 @@
 //     pthread_mutex_t mutex;          // Mutex for the fork
 // }   t_fork;
 
-typedef struct s_philo  t_philo;
-typedef struct s_table  t_table;
-typedef struct timeval  t_timeval;
+typedef struct s_philo	t_philo;
+typedef struct s_table	t_table;
+typedef struct timeval	t_timeval;
 
-//NO NEED DEFAULT(as 0) : Philosophers start in THINKING state immediately when their thread begins
-//NO NEED FULL : Handle meal completion through counting rather than state:
+// NO NEED DEFAULT(as 0) : Philo start THINKING right when their thread begin
+// NO NEED FULL : Handle meal completion through counting rather than state
 typedef enum e_state
 {
-    TAKING_FORK,
-    EATING,
-    SLEEPING,
-    THINKING,
-    DIED,
-}   t_state;
+	TAKING_FORK,
+	EATING,
+	SLEEPING,
+	THINKING,
+	DIED,
+}						t_state;
 
 typedef struct s_philo
 {
@@ -96,7 +96,7 @@ struct					s_forks
 	pthread_mutex_t		death_mutex;
 };
 If you use this structure,
-Each philosopher would need access to the s_forks instance 
+Each philosopher would need access to the s_forks instance
 to get their respective fork mutexes.
 Here’s why this can be more complex:
 
@@ -105,7 +105,7 @@ b. Redundant encapsulation
 c. Complicates indexing
 d. No clear benefit
 The s_forks structure doesn’t add any functional advantage.
-The same goal (managing mutexes for forks) 
+The same goal (managing mutexes for forks)
 is already achieved with table->forks.
 */
 
@@ -115,7 +115,7 @@ is already achieved with table->forks.
 
 /***** MAIN *****/
 // void	check_args(int ac, char *av[]);
-int	check_args(int ac, char *av[]);
+int						check_args(int ac, char *av[]);
 int						start_party(t_table *table);
 int						join_all_threads(t_table *table);
 

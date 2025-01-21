@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:51:25 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/20 19:34:26 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/21 14:03:13 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,24 +30,16 @@ bool	check_feast_stop(t_table *table)
 }
 
 /** check has dead
- * This function checks if a philosopher has died.
- * The philosopher's life is determined by the time since their last meal.
+ * The philo's life is determined by the time since their last meal
+ * - get last_eat_time->lock/unlock mutex to safely access
+ * - get feast_stop
  * @note (current_time - last_eat) > philo->ph_table->time_to_die
- * This checks if the philosopher has exceeded the time limit for eating,
+ * This checks if the philosopher has exceeded the time limit for eating
  * @note
- *
-	- Directly accessing philo->last_eat_time without a mutex in a multithreaded environment can potentially be dangerous
- * - In a multithreaded program,
-	multiple threads may be trying to read from or write to shared data (in this case,
-	last_eat_time) concurrently.
- * If one thread is reading last_eat_time while another thread is updating it,
-	this can lead to race conditions,
- * where the value you read may not be the one that was intended to be used.
- * When try to access shared storage => must protect with mutex lock/unlock
-
-	* should not directly access philo->last_meal_time without using a mutex if the last_meal_time is potentially being modified concurrently by other threads.
- * @return bool
- * true(1) / false(0)!!!!
+ * When try to access shared storage => must protect with mutex lock/unlock!
+ * Should not directly access philo->last_meal_time without using a mutex,
+ * if last_meal_time potentially modified concurrently by other threads.
+ * @return true(1) / false(0)!!!!
  */
 bool	check_has_dead(t_philo *philo)
 {
@@ -55,16 +47,12 @@ bool	check_has_dead(t_philo *philo)
 	unsigned long	last_eat;
 
 	current = get_current_time();
-
-	//get last_eat_time->lock/unlock mutex to safely access
 	pthread_mutex_lock(&philo->eating_mutex);
 	last_eat = philo->last_eat_time;
 	pthread_mutex_unlock(&philo->eating_mutex);
-
-	//get feast_stop
 	pthread_mutex_lock(&philo->ph_table->stop_mutex);
-	if (!philo->ph_table->feast_stop &&
-		(current - last_eat) > philo->ph_table->time_to_die)
+	if (!philo->ph_table->feast_stop && (current
+			- last_eat) > philo->ph_table->time_to_die)
 	{
 		philo->ph_table->feast_stop = true;
 		pthread_mutex_unlock(&philo->ph_table->stop_mutex);
@@ -75,9 +63,10 @@ bool	check_has_dead(t_philo *philo)
 	return (false);
 }
 
-/** check  meals
-*  Check if ALL philosophers(t_table *table) have eaten the required number of times (if must_eat_count is set)
- *
+/** check_finish_must eat
+ * Check if ALL philos finish the required meals(if must_eat_count is set)
+ * First check if there's assigned must-eat (av[6])
+ * Then Loop to check each philo (tablee->philos[i])
  */
 bool	check_finish_musteat(t_table *table)
 {
@@ -86,9 +75,8 @@ bool	check_finish_musteat(t_table *table)
 
 	i = -1;
 	full_philo = 0;
-	// First check if there's assigned must-eat (av[6])
 	if (table->nb_must_eat == -1)
-		return (false); // stop the function
+		return (false);
 	while (++i < table->nb_philo)
 	{
 		pthread_mutex_lock(&table->philos[i].eating_mutex);
@@ -102,12 +90,8 @@ bool	check_finish_musteat(t_table *table)
 }
 
 /** supervisor (another extra thread!)
- * main monitor function that runs in a separate thread!
-
-	* Continuously check the status of the philos by calling check_death and check_meals for each philosopher and the entire table,
-	respectively.
- * @note while (1)
- * Important to have while(1) -> Check the whole program simotaneously
+ * main monitor function running in a separate thread!
+ * Continuously/Symotaneously check philos status (finish meals||dead)
  * @note usleep(1000)
  * - Prevent busy-waiting.
  * - Allow other threads to execute.
@@ -115,8 +99,8 @@ bool	check_finish_musteat(t_table *table)
  */
 void	*supervisor(void *arg)
 {
-	t_table *table;
-	int i;
+	t_table	*table;
+	int		i;
 
 	table = (t_table *)arg;
 	while (1)
@@ -127,13 +111,13 @@ void	*supervisor(void *arg)
 			if (check_has_dead(&table->philos[i]))
 				return (NULL);
 		}
-			if (check_finish_musteat(table))
-			{
-				pthread_mutex_lock(&table->stop_mutex);
-				table->feast_stop = true;
-				pthread_mutex_unlock(&table->stop_mutex);
-				return (NULL);
-			}
+		if (check_finish_musteat(table))
+		{
+			pthread_mutex_lock(&table->stop_mutex);
+			table->feast_stop = true;
+			pthread_mutex_unlock(&table->stop_mutex);
+			return (NULL);
+		}
 		usleep(1000);
 	}
 	return (NULL);
