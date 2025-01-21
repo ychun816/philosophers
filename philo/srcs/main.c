@@ -12,8 +12,47 @@
 
 #include "philo.h"
 
+static bool	is_input_valid(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[0] == '-' || !str[i])
+		return (false);//0
+	while(str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (false);//0
+		i++;
+	}
+	return (true);//1
+}
+
+/** parse n check args */
+// void	check_args(int ac, char *av[])
+int	check_args(int ac, char *av[])
+{
+	int	i;
+
+	i = 1;
+	// if (ac < 5 || ac > 6)
+	// 	ft_putstr_fd("Error! Wrong number of arguments\n", STDERR);
+
+	while (i < ac)
+	{
+		if (!is_input_valid(av[i]))
+		{
+			ft_putstr_fd("Error! Invalid Arguments\n", STDERR);
+			// return ;
+			return (FAILURE);
+		}
+		i++;
+	}
+	return (SUCCESS);
+}
+
 /**
- * - Parse args
+ * - Parse n check args
  * - Initialize structures (table, philo)
  * - Start simulation (create threads)
  * - Join threads
@@ -22,12 +61,12 @@
  */
 int	main(int ac, char *av[])
 {
-	t_table	table;
+    t_table table;
 
 	if (ac < 5 || ac > 6)
-		return (ft_putstr_fd("Invalid Arguments\n", STDERR), FAILURE);
-    // if (parse_n_check_args(ac, av, table))
+		return (ft_putstr_fd("Error! Wrong number of arguments\n", STDERR), FAILURE);
 
+	//init table
 	ft_memset(&table, 0, sizeof(t_table)); // has to be outof init_table func
 	if (init_table(ac, av, &table))
 		return (ft_putstr_fd("Initialization Failed\n", STDERR), FAILURE);
@@ -48,14 +87,6 @@ int	main(int ac, char *av[])
 	return (SUCCESS);s
 }
 
-/** parse n check args
- * use atoi to initiate structure
- */
-int parse_n_check_args(int ac, char *av[], t_table *table)
-{
-    
-}
-
 /** start_party
  * pthread_create() -> 2 philo 2 threads, etc
  * 
@@ -65,10 +96,9 @@ int parse_n_check_args(int ac, char *av[], t_table *table)
  */
 int	start_party(t_table *table)
 {
-	int	i;
+    int i;
 
 	i = -1;
-
 	table->start_time = get_current_time();
 	// each philo has each thread -> loop to create
 	while (++i < table->nb_philo)

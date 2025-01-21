@@ -14,14 +14,6 @@
 
 /** CLEANUP_ALL
  * @note
- * &table->forks[i], WITH & -> get address of forks[i]
- * table->forks: A POINTER -> an array of pthread_mutex_t,
-	allocated dynamically.
- * table->forks[i]:A VALUE -> accesses an individual mutex in the array.
- * Since pthread_mutex_destroy requires a pointer to the mutex,
- * -> Need to pass the address of table->forks[i] => "&table->forks[i]"
- *
- * @note
  * in philo struct:
  * - pthread_mutex_t *left_fork;
  * - pthread_mutex_t *right_fork;
@@ -34,22 +26,29 @@
  * It's dynamically allocated with malloc during initialization.
  * After destroying all the mutexes it holds, MUST FREE the memory it uses
  *
+ * @note
+ * If table is NULL, trying to access table->philos or table->forks would result in a segmentation fault,
+ * as the memory address NULL is not a valid location to store or access data.
  */
 void	cleanup_all(t_table *table)
 {
 	int	i;
 
 	i = -1;
+
+	if (!table)// Optional check to avoid accessing a NULL table
+		return ;
 	// clean mutex in philo struct -> many threads(arrays)-> loop
 	while (++i < table->nb_philo)
 	{
-		// mutex in philo struct
-		pthread_mutex_destroy(&table->philos[i].eating_mutex);
-		pthread_mutex_destroy(&table->forks[i]);
+		if (table->philos)
+			pthread_mutex_destroy(&table->philos[i].eating_mutex);
+		if (table->forks)
+			pthread_mutex_destroy(&table->forks[i]);
 	}
+	free(table->forks);
+	free(table->philos);
 	// clean mutex in table struct
 	pthread_mutex_destroy(&table->print_mutex);
 	pthread_mutex_destroy(&table->stop_mutex);
-	free(table->forks);
-	free(table->philos);
 }

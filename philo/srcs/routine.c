@@ -22,14 +22,8 @@ Replace timestamp_in_ms with the current timestamp in milliseconds
 and X with the philosopher number.
  */
 
-/** GET CURRENT TIME
-struct				timeval
-{
-  __time_t tv_sec; //SECONDS
-  __suseconds_t tv_usec; //MICROseconds
-}
-*/
-unsigned long	get_current_time(void)
+/** GET TIME*/
+unsigned long   get_current_time(void)
 {
 	t_timeval	tv;
 
@@ -52,28 +46,25 @@ unsigned long	get_current_time(void)
 void	print_state(t_philo *philo, t_state state)
 {
 	unsigned long	current_time;
-	bool			is_stop;
 
-	// pthread_mutex_lock(&philo->ph_table->print_mutex);
-	// is_stop = check_feast_stop(philo->ph_table);
-	pthread_mutex_lock(&philo->ph_table->stop_mutex);
-	is_stop = &philo->ph_table->feast_stop;
-	pthread_mutex_unlock(&philo->ph_table->stop_mutex);
-	if (!is_stop || state == DIED)
+	//lock print mutex first
+    pthread_mutex_lock(&philo->ph_table->print_mutex);
+    //if no feast not stop || if someone died
+	if (!check_feast_stop(philo->ph_table) || state == DIED)
 	{
-		current_time = get_current_time() - (philo->ph_table->start_time);
-		if (state == TAKING_LFT_FORK)
-			printf("%ld %d has taken left fork\n", current_time, philo->id);
-        else if (state == TAKING_RT_FORK)
-            printf("%ld %d has taken right fork\n", current_time, philo->id);
+		//get elapse time
+        current_time = get_current_time() - (philo->ph_table->start_time);
+		//print
+        if (state == TAKING_FORK)
+			printf("%lu %d has taken a fork\n", current_time, philo->id);
 		else if (state == EATING)
-			printf("%ld %d  is eating\n", current_time, philo->id);
+			printf("%lu %d is eating\n", current_time, philo->id);
 		else if (state == SLEEPING)
-			printf("%ld %d  is sleeping\n", current_time, philo->id);
+			printf("%lu %d is sleeping\n", current_time, philo->id);
 		else if (state == THINKING)
-			printf("%ld %d  is thinking\n", current_time, philo->id);
+			printf("%lu %d is thinking\n", current_time, philo->id);
 		else if (state == DIED)
-			printf("%ld %d  died", current_time, philo->id);
+			printf("%lu %d died\n", current_time, philo->id);
 	}
 	pthread_mutex_unlock(&philo->ph_table->print_mutex);
 }
@@ -101,29 +92,37 @@ void	*philo_routine(void *arg)
 {
 	t_philo	*philo;
 
-	philo = (t_philo *)arg; // Cast the void pointer to t_philo pointer
-	if (philo->id % 2 == 0)
+	philo = (t_philo *)arg;
+    if (philo->id % 2 == 0)//philo->id % 2?
 		usleep(1000);
-	while (1)
-	{
-		// check if stop
-		if (check_feast_stop(philo->ph_table))
-			break ;
-		// pthread_mutex_lock(philo->ph_table->feast_stop);
-		// is_stop = philo->ph_table->feast_stop;
-		// pthread_mutex_unlock(philo->ph_table->feast_stop);
-		// if (is_stop) //break if the feast stop
-		//     break ;
-		take_forks(philo);
-		eating(philo);
-		// sleeping(philo);
-		// sleep & thinking : philo transitios
-		print_state(philo, SLEEPING);
-		give_me_a_break(philo->ph_table->time_to_sleep, philo->ph_table);
-			// sleeping
-		print_state(philo, THINKING);
-	}
-	return (NULL);
+    while (!check_feast_stop(philo->ph_table))
+    {
+        take_forks(philo);
+        eating(philo);
+        sleeping(philo);
+        print_state(philo, THINKING);//thinking(philo);
+    }
+    return (NULL);
+    //OG:
+	// while (1)
+	// {
+	// 	// check if stop
+	// 	if (check_feast_stop(philo->ph_table))
+	// 		break ;
+	// 	// pthread_mutex_lock(philo->ph_table->feast_stop);
+	// 	// is_stop = philo->ph_table->feast_stop;
+	// 	// pthread_mutex_unlock(philo->ph_table->feast_stop);
+	// 	// if (is_stop) //break if the feast stop
+	// 	//     break ;
+	// 	take_forks(philo);
+	// 	eating(philo);
+	// 	// sleeping(philo);
+	// 	// sleep & thinking : philo transitios
+	// 	give_me_a_break(philo->ph_table->time_to_sleep, philo->ph_table);
+	// 	print_state(philo, SLEEPING);
+	// 	print_state(philo, THINKING);
+	// }
+	// return (NULL);
 }
 
 /** take_forks
@@ -135,19 +134,19 @@ void	*philo_routine(void *arg)
  */
 void	take_forks(t_philo *philo)
 {
-	if (philo->id % 2 == 0)
+	if (philo->id % 2 == 1)//odd start first
 	{
 		pthread_mutex_lock(philo->left_fork);
-		print_state(philo, TAKING_LFT_FORK);
-		pthread_mutex_unlock(philo->right_fork);
-		print_state(philo, TAKING_RT_FORK);
+		print_state(philo, TAKING_FORK);
+		pthread_mutex_lock(philo->right_fork);
+		print_state(philo, TAKING_FORK);
 	}
 	else
 	{
-		pthread_mutex_unlock(philo->right_fork);
-		print_state(philo, TAKING_RT_FORK);
+		pthread_mutex_lock(philo->right_fork);
+		print_state(philo, TAKING_FORK);
 		pthread_mutex_lock(philo->left_fork);
-		print_state(philo, TAKING_LFT_FORK);
+		print_state(philo, TAKING_FORK);
 	}
 }
 
@@ -169,16 +168,32 @@ void	eating(t_philo *philo)
 	pthread_mutex_lock(&philo->eating_mutex);
 	philo->last_eat_time = get_current_time();
 	philo->eat_count++;
-	pthread_mutex_unlock(&philo->eating_mutex);
 	print_state(philo, EATING);
+	pthread_mutex_unlock(&philo->eating_mutex);
+
 	// periodic check ->usleep
 	give_me_a_break(philo->ph_table->time_to_eat, philo->ph_table);
-	// release forks
+
+    // release forks
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
 
-/** give me a break (sleeping)
+/** sleeping */
+void    sleeping(t_philo *philo)
+{
+    print_state(philo, SLEEPING);
+    give_me_a_break(philo->ph_table->time_to_sleep, philo->ph_table);
+}
+
+/** thinking */
+// void    thinking(t_philo *philo)
+// {
+//     print_state(philo, THINKING);
+// }
+
+/** give me a break (periodic check)
+ * Adds responsiveness and efficiency to delays by checking for global stop conditions during the wait.
  * Common Practice! Periodic check
  * Calculate the duration (current - start)
  * @param unsigned long start
@@ -193,13 +208,20 @@ void	give_me_a_break(unsigned long duration, t_table *table)
 	unsigned long	current;
 
 	start = get_current_time();
-	while (1)
-	{
-		if (check_feast_stop(table))
-			break ;
-		current = get_current_time();
+	while (!check_feast_stop(table))
+    {
+        current = get_current_time();
 		if ((current - start) >= duration)
 			break ;
 		usleep(500);
-	}
+    }
+    // while (1)
+	// {
+	// 	if (check_feast_stop(table))
+	// 		break ;
+	// 	current = get_current_time();
+	// 	if ((current - start) >= duration)
+	// 		break ;
+	// 	usleep(500);
+	// }
 }

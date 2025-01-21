@@ -28,18 +28,6 @@ bool	check_feast_stop(t_table *table)
 	pthread_mutex_unlock(&table->stop_mutex);
 	return (is_stop);
 }
-/* int ver:
-int	check_feast_stop(t_table *table)
-{
-	int	is_stop;
-
-	pthread_mutex_lock(&table->stop_mutex);
-	is_stop = table->feast_stop;
-	pthread_mutex_unlock(&table->stop_mutex);
-	return (is_stop);  // Return value: 1 (true) if the feast should stop,
-		0 (false) if it should continue
-}
-*/
 
 /** check has dead
  * This function checks if a philosopher has died.
@@ -65,32 +53,30 @@ bool	check_has_dead(t_philo *philo)
 {
 	unsigned long	current;
 	unsigned long	last_eat;
-	bool			is_dead;
 
 	current = get_current_time();
-	// Lock the mutex protecting the philosopher's last meal time to safely access it
+
+	//get last_eat_time->lock/unlock mutex to safely access
 	pthread_mutex_lock(&philo->eating_mutex);
 	last_eat = philo->last_eat_time;
 	pthread_mutex_unlock(&philo->eating_mutex);
-	// check dead
+
+	//get feast_stop
 	pthread_mutex_lock(&philo->ph_table->stop_mutex);
-	is_dead = philo->ph_table->feast_stop;
-	if (!is_dead && (current - last_eat) > philo->ph_table->time_to_die)
-		// no dead yet
+	if (!philo->ph_table->feast_stop &&
+		(current - last_eat) > philo->ph_table->time_to_die)
 	{
 		philo->ph_table->feast_stop = true;
 		pthread_mutex_unlock(&philo->ph_table->stop_mutex);
-			// unlock right after!
 		print_state(philo, DIED);
 		return (true);
 	}
-	pthread_mutex_unlock(&philo->ph_table->stop_mutex); // unlock right after!
-	return (false);                                     // 0
+	pthread_mutex_unlock(&philo->ph_table->stop_mutex);
+	return (false);
 }
 
 /** check  meals
-
-	*  Check if ALL philosophers(t_table *table) have eaten the required number of times (if must_eat_count is set)
+*  Check if ALL philosophers(t_table *table) have eaten the required number of times (if must_eat_count is set)
  *
  */
 bool	check_finish_musteat(t_table *table)
@@ -131,7 +117,6 @@ void	*supervisor(void *arg)
 {
 	t_table *table;
 	int i;
-	// bool is_the_end;
 
 	table = (t_table *)arg;
 	while (1)
@@ -139,23 +124,17 @@ void	*supervisor(void *arg)
 		i = -1;
 		while (++i < table->nb_philo)
 		{
-			if (check_has_dead(&table->philos[i])) // philos[i] is value,
-				//not pointer!
+			if (check_has_dead(&table->philos[i]))
 				return (NULL);
+		}
 			if (check_finish_musteat(table))
 			{
 				pthread_mutex_lock(&table->stop_mutex);
 				table->feast_stop = true;
 				pthread_mutex_unlock(&table->stop_mutex);
 				return (NULL);
-				// if (check_feast_stop(table))
-				// {
-				//     is_the_end = true;
-				//     return (NULL);
-				// }
 			}
-		}
-		usleep(1000); // notneccsary , but suggested!
+		usleep(1000);
 	}
 	return (NULL);
 }
