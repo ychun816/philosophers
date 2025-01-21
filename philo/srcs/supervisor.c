@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:51:25 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/21 14:03:13 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/21 20:42:06 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ bool	check_has_dead(t_philo *philo)
 	last_eat = philo->last_eat_time;
 	pthread_mutex_unlock(&philo->eating_mutex);
 	pthread_mutex_lock(&philo->ph_table->stop_mutex);
-	if (!philo->ph_table->feast_stop && (current
-			- last_eat) > philo->ph_table->time_to_die)
+	if (philo->id != 1 && !philo->ph_table->feast_stop
+		&& (current - last_eat) > philo->ph_table->time_to_die)
 	{
 		philo->ph_table->feast_stop = true;
 		pthread_mutex_unlock(&philo->ph_table->stop_mutex);
@@ -103,7 +103,7 @@ void	*supervisor(void *arg)
 	int		i;
 
 	table = (t_table *)arg;
-	while (1)
+	while (!check_feast_stop(table))
 	{
 		i = -1;
 		while (++i < table->nb_philo)
@@ -122,3 +122,29 @@ void	*supervisor(void *arg)
 	}
 	return (NULL);
 }
+// OG
+// void	*supervisor(void *arg)
+// {
+// 	t_table	*table;
+// 	int		i;
+
+// 	table = (t_table *)arg;
+// 	while (1)
+// 	{
+// 		i = -1;
+// 		while (++i < table->nb_philo)
+// 		{
+// 			if (check_has_dead(&table->philos[i]))
+// 				return (NULL);
+// 		}
+// 		if (check_finish_musteat(table))
+// 		{
+// 			pthread_mutex_lock(&table->stop_mutex);
+// 			table->feast_stop = true;
+// 			pthread_mutex_unlock(&table->stop_mutex);
+// 			return (NULL);
+// 		}
+// 		usleep(1000);
+// 	}
+// 	return (NULL);
+// }

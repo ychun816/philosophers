@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:54:01 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/21 13:06:53 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/21 20:37:21 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,10 @@
 
 # define SUCCESS 0
 # define FAILURE 1
-
 # define STDERR 2
+# define MAX_PHILOS 200
 
 /***** STRUCTURES *****/
-
 // struct timeval
 // {
 //   __time_t tv_sec;		/* Seconds.  */
@@ -57,7 +56,7 @@ typedef enum e_state
 	EATING,
 	SLEEPING,
 	THINKING,
-	DIED,
+	DIED,	
 }						t_state;
 
 typedef struct s_philo
@@ -78,6 +77,7 @@ typedef struct s_table
 	unsigned long		time_to_die;
 	unsigned long		time_to_eat;
 	unsigned long		time_to_sleep;
+	unsigned long		time_to_think;
 	int					nb_must_eat;
 	unsigned long		start_time;
 	bool				feast_stop;
@@ -114,18 +114,17 @@ is already achieved with table->forks.
 /*********************/
 
 /***** MAIN *****/
-// void	check_args(int ac, char *av[]);
-int						check_args(int ac, char *av[]);
+void					handle_one_philo(t_philo *philo);
 int						start_party(t_table *table);
 int						join_all_threads(t_table *table);
 
 /***** INIT *****/
+int						check_args(int ac, char *av[]);
 int						init_table(int ac, char *av[], t_table *table);
 int						init_mutex(t_table *table);
 int						init_philo(t_table *table);
 
 /***** ROUTINE *****/
-unsigned long			get_current_time(void);
 void					print_state(t_philo *philo, t_state state);
 void					*philo_routine(void *arg);
 void					take_forks(t_philo *philo);
@@ -144,6 +143,7 @@ int						ft_atoi(const char *str);
 void					ft_putstr_fd(char *s, int fd);
 void					*ft_memset(void *block, int value, size_t n);
 int						ft_isdigit(int i);
+unsigned long			get_current_time(void);
 
 /***** CLEANUP *****/
 void					cleanup_all(t_table *table);

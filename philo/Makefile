@@ -6,7 +6,7 @@
 #    By: yilin <yilin@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/16 14:47:59 by yilin             #+#    #+#              #
-#    Updated: 2025/01/20 18:44:17 by yilin            ###   ########.fr        #
+#    Updated: 2025/01/21 19:20:46 by yilin            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 
 CC = cc
 #CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCL_DIR)
-CFLAGS = -Wall -Werror -g3 -I$(INCL_DIR) -pthread  # Add for linking <pthread.h>
+CFLAGS = -Wall -Werror -g3 -I$(INCL_DIR) -pthread -fsanitize=thread # Add for linking <pthread.h>
+#-MMD -MP
 
 RM = rm -rf
 
@@ -79,6 +80,9 @@ fclean: clean
 ### Rebuild the project ###
 re: fclean all
 	@echo "$(REDB)RE DONE$(COLOR_RESET)"
+	
+# Include dependency files
+#-include $(DEPS)
 
 # **************************************************************************** #
 #                              PHONY TARGETS                                   #

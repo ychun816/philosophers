@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:51:25 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/21 14:08:27 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/21 20:41:57 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,31 +56,27 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2)
+	if (philo->id % 2 == 0)
 		usleep(1000);
-	while (!check_feast_stop(philo->ph_table))
+	if (philo->ph_table->nb_philo == 1)
 	{
-		take_forks(philo);
-		eating(philo);
-		print_state(philo, SLEEPING);
-		give_me_a_break(philo->ph_table->time_to_sleep, philo->ph_table);
-		print_state(philo, THINKING);
+		handle_one_philo(philo);
+		return (NULL);
 	}
-	return (NULL);
+	else
+	{
+		while (!check_feast_stop(philo->ph_table))
+		{
+			take_forks(philo);
+			eating(philo);
+			print_state(philo, SLEEPING);
+			give_me_a_break(philo->ph_table->time_to_sleep, philo->ph_table);
+			print_state(philo, THINKING);
+			give_me_a_break(philo->ph_table->time_to_think, philo->ph_table);
+		}
+		return (NULL);
+	}
 }
-/*OG
-	while (1)
-	{
-		if (check_feast_stop(philo->ph_table))
-			break ;
-		take_forks(philo);
-		eating(philo);
-		give_me_a_break(philo->ph_table->time_to_sleep, philo->ph_table);
-		print_state(philo, SLEEPING);
-		print_state(philo, THINKING);
-	}
-	return (NULL);
-*/
 
 /** take_forks
  * - odd ID/ even ID take turns to take forks (1 philo needs 2 forks to eat)
@@ -125,19 +121,6 @@ void	eating(t_philo *philo)
 	pthread_mutex_unlock(philo->right_fork);
 }
 
-/** sleeping */
-// void	sleeping(t_philo *philo)
-// {
-// 	print_state(philo, SLEEPING);
-// 	give_me_a_break(philo->ph_table->time_to_sleep, philo->ph_table);
-// }
-
-/** thinking */
-// void    thinking(t_philo *philo)
-// {
-//     print_state(philo, THINKING);
-// }
-
 /** give me a break (periodic check)
  * Prevent busy-waiting (Repeatedly doing same move) & Exhausting resources(CPU)
  * Allows the system to run other tasks in the meantime
@@ -160,7 +143,7 @@ void	give_me_a_break(unsigned long duration, t_table *table)
 		usleep(500);
 	}
 }
-/* OG
+/* OGS
 	while (1)
 	{
 		if (check_feast_stop(table))
@@ -171,3 +154,15 @@ void	give_me_a_break(unsigned long duration, t_table *table)
 		usleep(500);
 	}
 */
+/** sleeping */
+// void	sleeping(t_philo *philo)
+// {
+// 	print_state(philo, SLEEPING);
+// 	give_me_a_break(philo->ph_table->time_to_sleep, philo->ph_table);
+// }
+
+/** thinking */
+// void    thinking(t_philo *philo)
+// {
+//     print_state(philo, THINKING);
+// }
