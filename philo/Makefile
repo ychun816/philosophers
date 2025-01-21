@@ -24,7 +24,7 @@ INCL_DIR = includes
 SRCS_DIR = srcs
 OBJS_DIR = objs
 
-FL = cleanup.c  init.c  main.c  minilibft.c  routine.c  supervisor.c  #test.c
+FL = cleanup.c  init.c  main.c  routine.c  supervisor.c  tools.c  #test.c
 
 # **************************************************************************** #
 #                              SRC & OBJ FILES                                 #

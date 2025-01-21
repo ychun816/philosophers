@@ -64,3 +64,11 @@ void	*ft_memset(void *block, int value, size_t n)
 	}
 	return (block);
 }
+
+/** ft_isdigit */
+int	ft_isdigit(int i)
+{
+	if (i >= '0' && i <= '9')
+		return (1);
+	return (0);
+}

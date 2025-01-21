@@ -79,8 +79,8 @@ typedef struct s_table
 	unsigned long		time_to_eat;
 	unsigned long		time_to_sleep;
 	int					nb_must_eat;
-	bool				feast_stop;
 	unsigned long		start_time;
+	bool				feast_stop;
 	t_philo				*philos;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		print_mutex;
@@ -114,6 +114,8 @@ is already achieved with table->forks.
 /*********************/
 
 /***** MAIN *****/
+// void	check_args(int ac, char *av[]);
+int	check_args(int ac, char *av[]);
 int						start_party(t_table *table);
 int						join_all_threads(t_table *table);
 
@@ -123,10 +125,12 @@ int						init_mutex(t_table *table);
 int						init_philo(t_table *table);
 
 /***** ROUTINE *****/
+unsigned long			get_current_time(void);
 void					print_state(t_philo *philo, t_state state);
 void					*philo_routine(void *arg);
 void					take_forks(t_philo *philo);
 void					eating(t_philo *philo);
+void					sleeping(t_philo *philo);
 void					give_me_a_break(unsigned long duration, t_table *table);
 
 /***** SUPERVISOR *****/
@@ -135,11 +139,11 @@ bool					check_has_dead(t_philo *philo);
 bool					check_finish_musteat(t_table *table);
 void					*supervisor(void *arg);
 
-/***** MINILIBFT *****/
+/***** TOOLS *****/
 int						ft_atoi(const char *str);
 void					ft_putstr_fd(char *s, int fd);
 void					*ft_memset(void *block, int value, size_t n);
-unsigned long			get_current_time(void);
+int						ft_isdigit(int i);
 
 /***** CLEANUP *****/
 void					cleanup_all(t_table *table);

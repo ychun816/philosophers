@@ -29,7 +29,10 @@
  */
 int	init_table(int ac, char *av[], t_table *table)
 {
-	// ft_memset(&table, 0, sizeof(t_table)); // Zero-initialize the structure
+	if (check_args(ac, av))
+		return (FAILURE);
+
+	//parse n init
 	table->nb_philo = ft_atoi(av[1]);
 	table->time_to_die = ft_atoi(av[2]);
 	table->time_to_eat = ft_atoi(av[3]);
@@ -37,10 +40,17 @@ int	init_table(int ac, char *av[], t_table *table)
 	if (ac == 6)
 		table->nb_must_eat = ft_atoi(av[5]);
 	else
-		table->nb_must_eat = -1; // FAILURE-> no need to run check
-	if (table->nb_philo <= 1 || table->time_to_die <= 0
-		|| table->time_to_eat <= 0 || table->time_to_sleep <= 0)
+		table->nb_must_eat = -1;// FAILURE-> no need to run check
+
+	//double check input //CHECK LATER!! MAYBE NOT WORKING! 
+	if (table->nb_philo <= 0 || table->time_to_die <= 0
+		|| table->time_to_eat <= 0 || table->time_to_sleep <= 0 ||
+		(ac == 6 && table->nb_must_eat <= 0))
+	{
+		
+		// ft_putstr_fd("Error! Requires Positive Integer\n", STDERR);
 		return (FAILURE);
+	}
 	table->feast_stop = false;
 	// table->monitor = NULL;//will init in start_party
 	if (init_mutex(table))
@@ -49,6 +59,19 @@ int	init_table(int ac, char *av[], t_table *table)
 		return (FAILURE);
 	return (SUCCESS);
 }
+
+// static bool	check_args_valid(int ac, char *av[])
+// {
+// 	int	i;
+
+// 	i = -1;
+// 	while (++i <= ac)
+// 	{
+// 		if (!ft_strncmp(av[i], '-', 1)
+// 			return (false);
+// 	}
+// 	return (true);//1 true
+// }
 
 /** INIT MUTEX
  * @note
@@ -107,12 +130,18 @@ int	init_mutex(t_table *table)
 		return (FAILURE);
 	// allocate forks
 	while (++i < table->nb_philo)
-		pthread_mutex_init(&table->forks[i], NULL);
+	{
+		if (pthread_mutex_init(&table->forks[i], NULL))
+		{
+			while (--i >= 0)
+				pthread_mutex_destroy(&table->forks[i]);
+			return (free(table->forks), FAILURE);
+		}
+	}
 	// init print mutex
-	if (pthread_mutex_init(&table->print_mutex, NULL))
-		return (FAILURE);
-	if (pthread_mutex_init(&table->stop_mutex, NULL))
-		return (FAILURE);
+	if (pthread_mutex_init(&table->print_mutex, NULL) ||
+		pthread_mutex_init(&table->stop_mutex, NULL))
+		return (cleanup_all(table), FAILURE);
 	return (SUCCESS);
 }
 
@@ -143,6 +172,10 @@ int	init_philo(t_table *table)
 			% (table->nb_philo)];
 	}
 	if (pthread_mutex_init(&table->philos[i].eating_mutex, NULL))
+	{
+		while (--i >= 0)
+			pthread_mutex_destroy(&table->philos[i].eating_mutex);
 		return (FAILURE);
+	}
 	return (SUCCESS);
 }
