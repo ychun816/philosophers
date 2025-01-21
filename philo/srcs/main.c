@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:51:25 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/20 20:30:02 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/21 12:58:30 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int ac, char *av[])
 		return (FAILURE);
 	}
 	cleanup_all(&table);
-	return (SUCCESS);
+	return (SUCCESS);s
 }
 
 /** parse n check args
