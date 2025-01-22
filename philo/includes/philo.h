@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:54:01 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/21 20:37:21 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/22 11:22:32 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@
 # define FAILURE 1
 # define STDERR 2
 # define MAX_PHILOS 200
+# define MSG_FORK "\033[38;5;223m%lu %d has taken a fork 🥄\033[0m\n"
+# define MSG_EAT "\033[38;5;120m%lu %d is eating 🍛\033[0m\n"
+# define MSG_SLEEP "\033[38;5;141m%lu %d is sleeping 💤\033[0m\n"
+# define MSG_THINK "\033[38;5;117m%lu %d is thinking 🌙\033[0m\n"
+# define MSG_DIED "\033[1;38;2;255;102;102m%lu %d died 💀\033[0m\n"
 
 /***** STRUCTURES *****/
 // struct timeval

@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:51:25 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/21 20:41:57 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/22 11:22:22 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,15 @@ void	print_state(t_philo *philo, t_state state)
 	{
 		current_time = get_current_time() - (philo->ph_table->start_time);
 		if (state == TAKING_FORK)
-		//\033[38;5;223m
-			printf("\033[38;5;223m%lu %d has taken a fork 🥄\033[0m\n", current_time, philo->id);
+			printf(MSG_FORK, current_time, philo->id);
 		else if (state == EATING)
-			printf("\033[38;5;120m%lu %d is eating 🍛\033[0m\n", current_time, philo->id);
+			printf(MSG_EAT, current_time, philo->id);
 		else if (state == SLEEPING)
-			printf("\033[38;5;141m%lu %d is sleeping 💤\033[0m\n", current_time, philo->id);
+			printf(MSG_SLEEP, current_time, philo->id);
 		else if (state == THINKING)
-			printf("\033[38;5;117m%lu %d is thinking 🌙\033[0m\n", current_time, philo->id);
+			printf(MSG_THINK, current_time, philo->id);
 		else if (state == DIED)
-			printf("\033[1;38;2;255;102;102m%lu %d died 💀\033[0m\n", current_time, philo->id);
+			printf(MSG_DIED, current_time, philo->id);
 	}
 	pthread_mutex_unlock(&philo->ph_table->print_mutex);
 }
