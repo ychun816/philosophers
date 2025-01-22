@@ -29,15 +29,16 @@ void	print_state(t_philo *philo, t_state state)
 	{
 		current_time = get_current_time() - (philo->ph_table->start_time);
 		if (state == TAKING_FORK)
-			printf("%lu %d has taken a fork\n", current_time, philo->id);
+		//\033[38;5;223m
+			printf("\033[38;5;223m%lu %d has taken a fork 🥄\033[0m\n", current_time, philo->id);
 		else if (state == EATING)
-			printf("%lu %d is eating\n", current_time, philo->id);
+			printf("\033[38;5;120m%lu %d is eating 🍛\033[0m\n", current_time, philo->id);
 		else if (state == SLEEPING)
-			printf("%lu %d is sleeping\n", current_time, philo->id);
+			printf("\033[38;5;141m%lu %d is sleeping 💤\033[0m\n", current_time, philo->id);
 		else if (state == THINKING)
-			printf("%lu %d is thinking\n", current_time, philo->id);
+			printf("\033[38;5;117m%lu %d is thinking 🌙\033[0m\n", current_time, philo->id);
 		else if (state == DIED)
-			printf("%lu %d died\n", current_time, philo->id);
+			printf("\033[1;38;2;255;102;102m%lu %d died 💀\033[0m\n", current_time, philo->id);
 	}
 	pthread_mutex_unlock(&philo->ph_table->print_mutex);
 }

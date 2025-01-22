@@ -34,14 +34,19 @@ FL = cleanup.c  init.c  main.c  routine.c  supervisor.c  tools.c  #test.c
 SRCS = $(addprefix $(SRCS_DIR)/, $(FL))
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 
+DEPS = $(OBJS:.o=.d)
+
 # **************************************************************************** #
 #                            COMPILER & FLAGS                                  #
 # **************************************************************************** #
 
 CC = cc
 #CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCL_DIR)
-CFLAGS = -Wall -Werror -g3 -I$(INCL_DIR) -pthread -fsanitize=thread # Add for linking <pthread.h>
+CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCL_DIR) -pthread -MMD -MP 
+#-fsanitize=thread # Add for linking <pthread.h> 
+#(-fsanitize=thread doesn't work on codespace)
 #-MMD -MP
+# LDFLAGS = -L/path/to/libtsan -ltsan #testing for threading flag
 
 RM = rm -rf
 
@@ -82,7 +87,7 @@ re: fclean all
 	@echo "$(REDB)RE DONE$(COLOR_RESET)"
 	
 # Include dependency files
-#-include $(DEPS)
+-include $(DEPS)
 
 # **************************************************************************** #
 #                              PHONY TARGETS                                   #
