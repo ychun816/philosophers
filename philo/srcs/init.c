@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:51:25 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/22 12:39:16 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/22 18:04:12 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,51 +171,4 @@ int	init_philo(t_table *table)
  *   Left fork: forks[1]
  *   Right fork: forks[0]
  * 
-*/
-/* OGS
-//INIT TABLE
-int	init_table(int ac, char *av[], t_table *table)
-{
-	if (check_args(ac, av))
-		return (FAILURE);
-	// parse n init
-	table->nb_philo = ft_atoi(av[1]);
-	table->time_to_die = ft_atoi(av[2]);
-	table->time_to_eat = ft_atoi(av[3]);
-	table->time_to_sleep = ft_atoi(av[4]);
-	if (ac == 6)
-		table->nb_must_eat = ft_atoi(av[5]);
-	else
-		table->nb_must_eat = -1;
-	// double check input //CHECK LATER!! MAYBE NOT WORKING!
-	// if (table->nb_philo <= 0 || table->time_to_die <= 0
-	// 	|| table->time_to_eat <= 0 || table->time_to_sleep <= 0 ||
-		//(ac == 6 && table->nb_must_eat <= 0))
-	// 	return (FAILURE);
-	table->feast_stop = false;
-	if (init_mutex(table))
-		return (FAILURE);
-	if (init_philo(table))
-		return (FAILUduration
-	table->philos = malloc(sizeof(t_philo) * (table->nb_philo));
-	if (!table->philos)
-		return (FAILURE);
-	while (++i < table->nb_philo)
-	{
-		table->philos[i].id = i + 1;
-		table->philos[i].eat_count = 0;
-		table->philos[i].last_eat_time = get_current_time();
-		table->philos[i].ph_table = table;
-		table->philos[i].left_fork = &table->forks[i];
-		table->philos[i].right_fork = &table->forks[(i + 1)
-			% (table->nb_philo)];
-	}
-	if (pthread_mutex_init(&table->philos[i].eating_mutex, NULL))
-	{
-		while (--i >= 0)
-			pthread_mutex_destroy(&table->philos[i].eating_mutex);
-		return (FAILURE);
-	}
-	return (SUCCESS);
-}
 */

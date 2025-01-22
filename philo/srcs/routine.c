@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:51:25 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/22 11:22:22 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/22 18:04:36 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,17 +143,7 @@ void	give_me_a_break(unsigned long duration, t_table *table)
 		usleep(500);
 	}
 }
-/* OGS
-	while (1)
-	{
-		if (check_feast_stop(table))
-			break ;
-		current = get_current_time();
-		if ((current - start) >= duration)
-			break ;
-		usleep(500);
-	}
-*/
+
 /** sleeping */
 // void	sleeping(t_philo *philo)
 // {

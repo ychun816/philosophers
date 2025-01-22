@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:51:25 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/21 20:42:06 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/22 18:04:46 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,29 +122,3 @@ void	*supervisor(void *arg)
 	}
 	return (NULL);
 }
-// OG
-// void	*supervisor(void *arg)
-// {
-// 	t_table	*table;
-// 	int		i;
-
-// 	table = (t_table *)arg;
-// 	while (1)
-// 	{
-// 		i = -1;
-// 		while (++i < table->nb_philo)
-// 		{
-// 			if (check_has_dead(&table->philos[i]))
-// 				return (NULL);
-// 		}
-// 		if (check_finish_musteat(table))
-// 		{
-// 			pthread_mutex_lock(&table->stop_mutex);
-// 			table->feast_stop = true;
-// 			pthread_mutex_unlock(&table->stop_mutex);
-// 			return (NULL);
-// 		}
-// 		usleep(1000);
-// 	}
-// 	return (NULL);
-// }

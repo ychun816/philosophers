@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:51:25 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/21 20:41:39 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/22 18:04:21 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,23 +99,3 @@ int	join_all_threads(t_table *table)
 		return (FAILURE);
 	return (SUCCESS);
 }
-
-/*OG
-int	start_party(t_table *table)
-{
-	int	i;
-
-	i = -1;
-	table->start_time = get_current_time();
-
-	while (++i < table->nb_philo)
-	{			
-		(pthread_create(&table->philos[i].thread, NULL, philo_routine,
-				&table->philos[i]))
-			return (FAILURE);
-	}
-	if (pthread_create(&table->supervise, NULL, supervisor, table))
-		return (FAILURE);
-	return (SUCCESS);
-}
-*/

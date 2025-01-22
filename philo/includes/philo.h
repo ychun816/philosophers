@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:54:01 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/22 11:58:52 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/22 18:05:43 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,29 +33,19 @@
 # define MSG_SLEEP "\033[38;5;141m%lu %d is sleeping\033[0m\n"
 # define MSG_THINK "\033[38;5;117m%lu %d is thinking\033[0m\n"
 # define MSG_DIED "\033[1;38;2;255;102;102m%lu %d died\033[0m\n"
+// 🥄  🍛  💤  🌙  💀
 
 /***** STRUCTURES *****/
-// 🥄  🍛  💤  🌙  💀
+
 // struct timeval
 // {
 //   __time_t tv_sec;		/* Seconds.  */
 //   __suseconds_t tv_usec;	/* Microseconds.  */
 // };
-
-// A fork is simply a mutex
-// it can either be locked (in use by a philosopher) or unlocked (available).
-// There's no additional data or properties we need to track about forks
-// typedef struct s_fork
-// {
-//     pthread_mutex_t mutex;          // Mutex for the fork
-// }   t_fork;
-
 typedef struct s_philo	t_philo;
 typedef struct s_table	t_table;
 typedef struct timeval	t_timeval;
 
-// NO NEED DEFAULT(as 0) : Philo start THINKING right when their thread begin
-// NO NEED FULL : Handle meal completion through counting rather than state
 typedef enum e_state
 {
 	TAKING_FORK,
@@ -94,27 +84,6 @@ typedef struct s_table
 	pthread_t			supervise;
 }						t_table;
 
-/* OG thoughts on s_forks stuct?
-struct					s_forks
-{
-	pthread_mutex_t		*forks;
-	pthread_mutex_t		print_status_mutex;
-	pthread_mutex_t		death_mutex;
-};
-If you use this structure,
-Each philosopher would need access to the s_forks instance
-to get their respective fork mutexes.
-Here’s why this can be more complex:
-
-a. Increased indirection
-b. Redundant encapsulation
-c. Complicates indexing
-d. No clear benefit
-The s_forks structure doesn’t add any functional advantage.
-The same goal (managing mutexes for forks)
-is already achieved with table->forks.
-*/
-
 /*********************/
 /***** FUNCTIONS *****/
 /*********************/
@@ -144,7 +113,7 @@ bool					check_has_dead(t_philo *philo);
 bool					check_finish_musteat(t_table *table);
 void					*supervisor(void *arg);
 
-/***** TOOLS *****/
+/***** TOOLS 1,2 *****/
 int						ft_atoi(const char *str);
 void					ft_putstr_fd(char *s, int fd);
 void					*ft_memset(void *block, int value, size_t n);
@@ -156,3 +125,25 @@ long					ft_atol(const char *nptr);
 void					cleanup_all(t_table *table);
 
 #endif
+
+/* NOTES
+Thoughts on s_forks stuct?
+struct					s_forks
+{
+	pthread_mutex_t		*forks;
+	pthread_mutex_t		print_status_mutex;
+	pthread_mutex_t		death_mutex;
+};
+If you use this structure,
+Each philosopher would need access to the s_forks instance
+to get their respective fork mutexes.
+Here’s why this can be more complex:
+
+a. Increased indirection
+b. Redundant encapsulation
+c. Complicates indexing
+d. No clear benefit
+The s_forks structure doesn’t add any functional advantage.
+The same goal (managing mutexes for forks)
+is already achieved with table->forks.
+*/
