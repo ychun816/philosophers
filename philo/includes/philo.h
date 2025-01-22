@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:54:01 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/22 11:22:32 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/22 11:58:52 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,14 @@
 # define FAILURE 1
 # define STDERR 2
 # define MAX_PHILOS 200
-# define MSG_FORK "\033[38;5;223m%lu %d has taken a fork 🥄\033[0m\n"
-# define MSG_EAT "\033[38;5;120m%lu %d is eating 🍛\033[0m\n"
-# define MSG_SLEEP "\033[38;5;141m%lu %d is sleeping 💤\033[0m\n"
-# define MSG_THINK "\033[38;5;117m%lu %d is thinking 🌙\033[0m\n"
-# define MSG_DIED "\033[1;38;2;255;102;102m%lu %d died 💀\033[0m\n"
+# define MSG_FORK "\033[38;5;223m%lu %d has taken a fork\033[0m\n"
+# define MSG_EAT "\033[38;5;120m%lu %d is eating\033[0m\n"
+# define MSG_SLEEP "\033[38;5;141m%lu %d is sleeping\033[0m\n"
+# define MSG_THINK "\033[38;5;117m%lu %d is thinking\033[0m\n"
+# define MSG_DIED "\033[1;38;2;255;102;102m%lu %d died\033[0m\n"
 
 /***** STRUCTURES *****/
+// 🥄  🍛  💤  🌙  💀
 // struct timeval
 // {
 //   __time_t tv_sec;		/* Seconds.  */
@@ -149,6 +150,7 @@ void					ft_putstr_fd(char *s, int fd);
 void					*ft_memset(void *block, int value, size_t n);
 int						ft_isdigit(int i);
 unsigned long			get_current_time(void);
+long					ft_atol(const char *nptr);
 
 /***** CLEANUP *****/
 void					cleanup_all(t_table *table);

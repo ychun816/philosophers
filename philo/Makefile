@@ -6,7 +6,7 @@
 #    By: yilin <yilin@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/16 14:47:59 by yilin             #+#    #+#              #
-#    Updated: 2025/01/21 19:20:46 by yilin            ###   ########.fr        #
+#    Updated: 2025/01/22 12:37:55 by yilin            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ INCL_DIR = includes
 SRCS_DIR = srcs
 OBJS_DIR = objs
 
-FL = cleanup.c  init.c  main.c  routine.c  supervisor.c  tools.c  #test.c
+FL = cleanup.c  init.c  main.c  routine.c  supervisor.c  tools.c tools2.c
 
 # **************************************************************************** #
 #                              SRC & OBJ FILES                                 #
@@ -42,8 +42,7 @@ DEPS = $(OBJS:.o=.d)
 
 CC = cc
 #CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCL_DIR)
-CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCL_DIR) -pthread -MMD -MP 
-#-fsanitize=thread # Add for linking <pthread.h> 
+CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCL_DIR) -pthread -MMD -MP #-fsanitize=thread # Add for linking <pthread.h>
 #(-fsanitize=thread doesn't work on codespace)
 #-MMD -MP
 # LDFLAGS = -L/path/to/libtsan -ltsan #testing for threading flag

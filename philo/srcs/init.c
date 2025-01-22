@@ -6,7 +6,7 @@
 /*   By: yilin <yilin@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:51:25 by yilin             #+#    #+#             */
-/*   Updated: 2025/01/21 20:42:33 by yilin            ###   ########.fr       */
+/*   Updated: 2025/01/22 12:39:16 by yilin            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,23 @@
  */
 static bool	is_input_valid(char *str)
 {
-	int	i;
+	int		i;
+	long	check_size;
 
 	i = 0;
 	if (str[0] == '-' || !str[i])
 		return (false);
 	while (str[i])
 	{
+		if (i > 10)
+			return (false);
 		if (!ft_isdigit(str[i]))
 			return (false);
 		i++;
 	}
+	check_size = ft_atol(str);
+	if (check_size > INT_MAX)
+		return (false);
 	return (true);
 }
 
@@ -190,16 +196,7 @@ int	init_table(int ac, char *av[], t_table *table)
 	if (init_mutex(table))
 		return (FAILURE);
 	if (init_philo(table))
-		return (FAILURE);
-	return (SUCCESS);
-}
-
-// INIT_PHILO
-int	init_philo(t_table *table)
-{
-	int	i;
-
-	i = -1;
+		return (FAILUduration
 	table->philos = malloc(sizeof(t_philo) * (table->nb_philo));
 	if (!table->philos)
 		return (FAILURE);
