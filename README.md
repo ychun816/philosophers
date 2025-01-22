@@ -2,6 +2,7 @@
 This is the Dining Philosophers problem, a classic computer science problem that demonstrates synchronization issues and deadlock handling in concurrent programming. 
 
 This program simulates philosophers sitting at a round table where each philosopher alternates between thinking and eating. Each philosopher needs two forks to eat, and forks are shared between adjacent philosophers. The challenge is to prevent deadlocks (where everyone is waiting for resources) and ensure fair resource allocation.
+More Detailed intro: https://hackmd.io/@QBrv51OvRPqs9dJjL2YIig/rknbEDPIyx
 
 ## Key components
 + Each philosopher is a separate thread
