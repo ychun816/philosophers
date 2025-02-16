@@ -23,3 +23,4 @@ This program simulates philosophers sitting at a round table where each philosop
 + Mutex Concepts Explained : https://hackmd.io/@QBrv51OvRPqs9dJjL2YIig/S1jna-dD1e
 + Concurrency(Deadlock Problem) in Philo : https://hackmd.io/@QBrv51OvRPqs9dJjL2YIig/SklPHejvJx
 + Test Input for Philo : https://hackmd.io/@QBrv51OvRPqs9dJjL2YIig/ByCZuHsD1x
++ Reference Study Flowchart (shoutout to HADMARINE's good work) : https://miro.com/app/board/uXjVLtUaJNU=/?share_link_id=577858696122
